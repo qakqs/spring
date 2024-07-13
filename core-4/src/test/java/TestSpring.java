@@ -9,9 +9,9 @@ public class TestSpring {
     public void test() throws BeansException {
         DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
         beanFactory.registerBeanDefinition("userService", new BeanDefinition(UserService.class));
-        beanFactory.registerBeanDefinition("queryDao", new BeanDefinition(QueryDao.class));
-        UserService userService =(UserService) beanFactory.getBean("userService", "lalalal", beanFactory.getBean("queryDao"));
-        userService.queryUserName();
+        beanFactory.registerBeanDefinition("userService1", new BeanDefinition(UserService.class));
+        UserService userService =(UserService) beanFactory.getBean("userService", "lalalal");
+        userService.queryUserInfo();
     }
 
 }

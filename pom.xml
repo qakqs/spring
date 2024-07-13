@@ -12,6 +12,7 @@
         <module>core-1</module>
         <module>core-2</module>
         <module>core-2-3</module>
+        <module>core-4</module>
 
     </modules>
 
@@ -27,6 +28,11 @@
             <artifactId>junit</artifactId>
             <version>4.13.2</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>3.3.0</version>
         </dependency>
     </dependencies>
 
