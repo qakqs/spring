@@ -1,9 +1,8 @@
 package cn.mini.beans;
 
 
-
 public class PropertyValue {
-    private String name;
+    private  String name;
 
     private  Object value;
 

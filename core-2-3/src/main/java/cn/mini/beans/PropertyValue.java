@@ -1,11 +1,10 @@
 package cn.mini.beans;
 
 
-
 public class PropertyValue {
-    private final String name;
+    private  String name;
 
-    private final Object value;
+    private  Object value;
 
 
     public PropertyValue(String name, Object value) {
@@ -13,5 +12,19 @@ public class PropertyValue {
         this.value = value;
     }
 
+    public String getName() {
+        return name;
+    }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Object getValue() {
+        return value;
+    }
+
+    public void setValue(Object value) {
+        this.value = value;
+    }
 }

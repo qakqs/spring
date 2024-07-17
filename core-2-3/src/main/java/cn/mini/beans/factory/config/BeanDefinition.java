@@ -1,9 +1,12 @@
 package cn.mini.beans.factory.config;
 
+import cn.mini.beans.PropertyValues;
+
 public class BeanDefinition {
 
     private Class beanClass;
 
+    private PropertyValues propertyValues;
 
     public BeanDefinition(Class beanClass) {
         this.beanClass = beanClass;
@@ -15,5 +18,13 @@ public class BeanDefinition {
 
     public void setBeanClass(Class beanClass) {
         this.beanClass = beanClass;
+    }
+
+    public PropertyValues getPropertyValues() {
+        return propertyValues;
+    }
+
+    public void setPropertyValues(PropertyValues propertyValues) {
+        this.propertyValues = propertyValues;
     }
 }

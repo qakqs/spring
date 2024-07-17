@@ -8,11 +8,14 @@ public class BeanDefinition {
 
     private PropertyValues propertyValues;
 
-
     public BeanDefinition(Class beanClass) {
         this.beanClass = beanClass;
-        this.propertyValues = new PropertyValues();
     }
+        public BeanDefinition(Class beanClass, PropertyValues propertyValues) {
+        this.propertyValues = propertyValues;
+        this.beanClass = beanClass;
+    }
+
 
     public Class getBeanClass() {
         return beanClass;
