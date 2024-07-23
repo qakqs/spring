@@ -30,31 +30,33 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
     protected Object createBeanInstance(String beanName, BeanDefinition beanDefinition, Object[] args) throws BeansException {
 
-        Constructor constructorUse = null;
+        Constructor constructorToUse = null;
         Class<?> beanClass = beanDefinition.getBeanClass();
-        Constructor<?>[] constructors = beanClass.getConstructors();
-        for (Constructor constructor : constructors) {
-            if (null != args && constructor.getParameterTypes().length == args.length) {
-                constructorUse = constructor;
+        Constructor<?>[] declaredConstructors = beanClass.getDeclaredConstructors();
+        for (Constructor ctor : declaredConstructors) {
+            if (null != args && ctor.getParameterTypes().length == args.length) {
+                constructorToUse = ctor;
                 break;
             }
         }
-        return instantiation.instantiate(beanDefinition, beanName, constructorUse, args);
+        return instantiation.instantiate(beanDefinition, beanName, constructorToUse, args);
     }
 
     protected void applyPropertyValues(Object bean, String beanName, BeanDefinition beanDefinition) throws BeansException {
         try {
             PropertyValues propertyValues = beanDefinition.getPropertyValues();
+            for (int i = 0; i < propertyValues.getPropertyValues().length; i++) {
+                String name = propertyValues.getPropertyValues()[i].getName();
+                Object value = propertyValues.getPropertyValues()[i].getValue();
 
-            for (PropertyValue propertyValue : propertyValues.getPropertyValues()) {
-                Object value = propertyValue.getValue();
-                String name = propertyValue.getName();
                 if (value instanceof BeanReference) {
                     // A 依赖 B，获取 B 的实例化
                     BeanReference beanReference = (BeanReference) value;
                     value = getBean(beanReference.getBeanName());
                 }
-                BeanUtil.setProperty(bean, name, value);
+                // 属性填充
+                BeanUtil.setFieldValue(bean, name, value);
+
             }
         } catch (Exception e) {
             throw new BeansException("Error setting property values：" + beanName);
