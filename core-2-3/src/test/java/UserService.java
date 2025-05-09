@@ -1,3 +1,5 @@
+import java.lang.reflect.Constructor;
+
 public class UserService {
 
 
@@ -13,7 +15,8 @@ public class UserService {
         System.out.println("查询用户信息：" + name);
     }
     public void queryUserName() {
-        System.out.println(queryDao.query());
+        System.out.println(queryDao.query("select * from user"));
+
     }
 
     @Override
