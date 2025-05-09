@@ -1,7 +1,7 @@
 import java.util.HashMap;
 import java.util.Map;
 
-public class QueryDao {
+public class UserDao {
 
     private static Map<String, String> hashMap = new HashMap<>();
 

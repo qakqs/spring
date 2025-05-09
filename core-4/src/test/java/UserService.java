@@ -2,20 +2,26 @@ public class UserService {
 
 
     private String uId;
-    private QueryDao queryDao;
 
-    public UserService(String uId, QueryDao queryDao) {
-        this.uId = uId;
-        this.queryDao = queryDao;
+    private UserDao userDao;
+
+    public void queryUserInfo() {
+        System.out.println("查询用户信息：" + userDao.queryUserName(uId));
     }
 
-public void queryUserInfo() {
-System.out.println("查询用户信息：" + queryDao.queryUserName(uId));
-}
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("");
-        sb.append("").append(uId);
-        return sb.toString();
+    public String getuId() {
+        return uId;
+    }
+
+    public void setuId(String uId) {
+        this.uId = uId;
+    }
+
+    public UserDao getUserDao() {
+        return userDao;
+    }
+
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
     }
 }

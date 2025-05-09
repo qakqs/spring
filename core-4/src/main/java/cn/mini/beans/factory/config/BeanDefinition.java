@@ -6,13 +6,13 @@ public class BeanDefinition {
 
     private Class beanClass;
 
-    private PropertyValues propertyValues;
+    private  PropertyValues propertyValues;
 
     public BeanDefinition(Class beanClass) {
         this.beanClass = beanClass;
     }
         public BeanDefinition(Class beanClass, PropertyValues propertyValues) {
-        this.propertyValues = propertyValues;
+        this.propertyValues = propertyValues != null ? propertyValues : new PropertyValues();
         this.beanClass = beanClass;
     }
 
