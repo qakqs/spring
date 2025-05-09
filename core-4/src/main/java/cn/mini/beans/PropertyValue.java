@@ -9,7 +9,7 @@ public class PropertyValue {
 
     public PropertyValue(String name, Object value) {
         this.name = name;
-        this.value = value;
+        this.value = value;s
     }
 
     public String getName() {
