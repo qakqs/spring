@@ -1,6 +1,7 @@
 package cn.mini.core.io;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -23,7 +24,7 @@ public class FileSystemResource implements Resource{
 
     @Override
     public InputStream getInputStream() throws IOException {
-        return null;
+        return new FileInputStream(this.file);
     }
 
     public String getPath() {
