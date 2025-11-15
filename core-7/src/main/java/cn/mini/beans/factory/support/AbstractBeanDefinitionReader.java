@@ -1,5 +1,6 @@
 package cn.mini.beans.factory.support;
 
+import cn.mini.beans.BeansException;
 import cn.mini.core.io.DefaultResourceLoader;
 import cn.mini.core.io.ResourceLoader;
 
@@ -27,4 +28,5 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
         return resourceLoader;
     }
 
+    public abstract void loadBeanDefinitions(String... locations) throws BeansException;
 }

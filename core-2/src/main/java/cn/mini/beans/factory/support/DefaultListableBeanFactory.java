@@ -6,7 +6,7 @@ import cn.mini.beans.factory.config.BeanDefinition;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory implements BeanDefinitionRegistry {
+public class  DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory implements BeanDefinitionRegistry {
 
     private Map<String, BeanDefinition> beanDefinitionMap = new HashMap<>();
 

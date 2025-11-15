@@ -2,7 +2,7 @@ package cn.mini.beans.factory;
 
 import cn.mini.beans.BeansException;
 
-public interface BeansFactory {
+public interface BeanFactory {
 
     public Object getBean(String name) throws BeansException;
 

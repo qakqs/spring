@@ -1,10 +1,20 @@
 package cn.mini.beans.factory.support;
 
 import cn.mini.beans.BeansException;
-import cn.mini.beans.factory.BeansFactory;
+import cn.mini.beans.factory.BeanFactory;
 import cn.mini.beans.factory.config.BeanDefinition;
+import cn.mini.beans.factory.config.BeanPostProcessor;
+import cn.mini.beans.factory.config.ConfigurableBeanFactory;
 
-public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements BeansFactory {
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
+
+    /**
+     * BeanPostProcessors to apply in createBean
+     */
+    private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
 
     @Override
     public Object getBean(String name, Object... args) throws BeansException {
@@ -21,8 +31,23 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
         return (T) getBean(name);
     }
 
+    @Override
+    public void addBeanPostProcessor(BeanPostProcessor beanPostProcessor) {
+        beanPostProcessors.remove(beanPostProcessor);
+        beanPostProcessors.add(beanPostProcessor);
 
-    protected <T> T doGetBean( String name,  Object[] args) throws BeansException {
+    }
+
+    /**
+     * Return the list of BeanPostProcessors that will get applied
+     * to beans created with this factory.
+     */
+    public List<BeanPostProcessor> getBeanPostProcessors() {
+        return this.beanPostProcessors;
+    }
+
+
+    protected <T> T doGetBean(String name, Object[] args) throws BeansException {
         Object bean = getSingleton(name);
         if (bean != null) {
             return (T) bean;
