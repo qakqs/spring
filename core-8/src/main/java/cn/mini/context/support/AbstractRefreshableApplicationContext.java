@@ -9,7 +9,7 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
     private DefaultListableBeanFactory beanFactory;
 
     @Override
-    protected ConfigurableListableBeanFactory getBeanFactory() throws BeansException {
+    protected ConfigurableListableBeanFactory getBeanFactory() {
         return beanFactory;
     }
 

@@ -2,21 +2,16 @@ package cn.mini.beans;
 
 import java.io.Serial;
 
-public class BeansException extends Exception {
+public class BeansException extends RuntimeException  {
     @Serial
     private static final long serialVersionUID = -56178313330468078L;
 
-    public BeansException() {
-        super();
+    public BeansException(String msg) {
+        super(msg);
     }
-    public BeansException(String message) {
-        super(message);
-    }
-    public BeansException(String message, Throwable cause) {
-        super(message, cause);
-    }
-    public BeansException(Throwable cause) {
-        super(cause);
+
+    public BeansException(String msg, Throwable cause) {
+        super(msg, cause);
     }
 
 }

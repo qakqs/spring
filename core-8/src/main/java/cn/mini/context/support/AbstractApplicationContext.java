@@ -26,7 +26,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
 
         // 5. 提前实例化单例Bean对象
         beanFactory.preInstantiateSingletons();
+
+        //注册钩子函数
+        registerShutdownHook();
+
     }
+
 
     private void registerBeanPostProcessors(ConfigurableListableBeanFactory beanFactory) throws BeansException {
 
@@ -45,7 +50,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         }
     }
 
-    protected abstract ConfigurableListableBeanFactory getBeanFactory() throws BeansException;
+    protected abstract ConfigurableListableBeanFactory getBeanFactory();
 
     protected abstract void refreshBeanFactory() throws BeansException;
 
@@ -66,12 +71,24 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
 
     @Override
     public Object getBean(String name, Object... args) throws BeansException {
-        return getBeanFactory().getBean(name,  args);
+        return getBeanFactory().getBean(name, args);
     }
 
     @Override
     public <T> T getBean(String name, Class<T> clzz) throws BeansException {
-        return getBeanFactory().getBean(name , clzz);
+        return getBeanFactory().getBean(name, clzz);
     }
+
+    @Override
+    public void registerShutdownHook() {
+        Runtime.getRuntime().addShutdownHook(new Thread(this::close));
+
+    }
+
+    @Override
+    public void close() {
+        getBeanFactory().destroySingletons();
+    }
+
 
 }

@@ -5,14 +5,12 @@ import cn.mini.beans.BeansException;
 import cn.mini.beans.PropertyValue;
 import cn.mini.beans.PropertyValues;
 import cn.mini.beans.factory.config.BeanDefinition;
-import cn.mini.beans.factory.config.BeanFactoryPostProcessor;
 import cn.mini.beans.factory.config.BeanReference;
 import cn.mini.beans.factory.support.DefaultListableBeanFactory;
 import cn.mini.beans.factory.xml.XmlBeanDefinitionReader;
 import cn.mini.context.support.ClassPathXmlApplicationContext;
 import cn.mini.core.io.DefaultResourceLoader;
 import cn.mini.core.io.Resource;
-import common.MyBeanFactoryPostProcessor;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -92,14 +90,16 @@ public class TestSpring {
         UserService userService = applicationContext.getBean("userService", UserService.class);
         String res = userService.queryUserInfo();
         System.out.println("测试结果：" + res);
+        applicationContext.close();
     }
 
-    @Test
-    public void test_xl() throws BeansException {
-        MyBeanFactoryPostProcessor app = new MyBeanFactoryPostProcessor();
-
-        System.out.println(app.getClass().isAssignableFrom(BeanFactoryPostProcessor.class));
+    public static void main(String[] args) {
+                // 1.初始化 BeanFactory
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        // 2. 获取Bean对象调用方法
+        UserService userService = applicationContext.getBean("userService", UserService.class);
+        String res = userService.queryUserInfo();
+        System.out.println("测试结果：" + res);
 
     }
-
 }

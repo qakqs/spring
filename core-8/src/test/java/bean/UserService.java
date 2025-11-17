@@ -1,6 +1,9 @@
 package bean;
 
-public class UserService {
+import cn.mini.beans.factory.DisposableBean;
+import cn.mini.beans.factory.InitializingBean;
+
+public class UserService implements InitializingBean, DisposableBean {
 
 
     private String uId;
@@ -10,7 +13,7 @@ public class UserService {
 
     public String queryUserInfo() {
         System.out.println("查询用户信息：" + userDao.queryUserName(uId));
-        return   userDao.queryUserName(uId) + "," + company + "," + location;
+        return userDao.queryUserName(uId) + "," + company + "," + location;
     }
 
     public String getuId() {
@@ -43,5 +46,17 @@ public class UserService {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    @Override
+    public void destroy() throws Exception {
+        System.out.println("执行：UserService.destroy");
+
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        System.out.println("执行：UserService.afterPropertiesSet");
+
     }
 }
