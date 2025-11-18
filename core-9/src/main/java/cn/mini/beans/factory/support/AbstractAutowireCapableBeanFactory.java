@@ -3,6 +3,7 @@ package cn.mini.beans.factory.support;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.mini.beans.BeansException;
+import cn.mini.beans.PropertyValue;
 import cn.mini.beans.PropertyValues;
 import cn.mini.beans.factory.*;
 import cn.mini.beans.factory.config.AutowireCapableBeanFactory;
@@ -25,14 +26,16 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         try {
             bean = createBeanInstance(beanName, beanDefinition, args);
             applyPropertyValues(bean, beanName, beanDefinition);
-            initializeBean(beanName, bean, beanDefinition);
+            bean = initializeBean(beanName, bean, beanDefinition);
         } catch (Exception e) {
             throw new BeansException("Instantiation of bean failed", e);
         }
 
         // 注册实现了 DisposableBean 接口的 Bean 对象
         registerDisposableBeanIfNecessary(beanName, bean, beanDefinition);
-        addSingleton(beanName, bean);
+        if (beanDefinition.isSingleton()){
+            addSingleton(beanName, bean);
+        }
         return bean;
     }
 
@@ -67,6 +70,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     }
 
     protected void registerDisposableBeanIfNecessary(String beanName, Object bean, BeanDefinition beanDefinition) {
+        // 非 Singleton 类型的 Bean 不执行销毁方法
+        if (!beanDefinition.isSingleton()) return;
         if (bean instanceof DisposableBean || StrUtil.isNotEmpty(beanDefinition.getDestroyMethodName())) {
             registerDisposableBean(beanName, new DisposableBeanAdapter(bean, beanName, beanDefinition));
         }
@@ -140,9 +145,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     protected void applyPropertyValues(Object bean, String beanName, BeanDefinition beanDefinition) throws BeansException {
         try {
             PropertyValues propertyValues = beanDefinition.getPropertyValues();
-            for (int i = 0; i < propertyValues.getPropertyValues().length; i++) {
-                String name = propertyValues.getPropertyValues()[i].getName();
-                Object value = propertyValues.getPropertyValues()[i].getValue();
+            for (PropertyValue propertyValue : propertyValues.getPropertyValues()) {
+
+                String name = propertyValue.getName();
+                Object value = propertyValue.getValue();
 
                 if (value instanceof BeanReference) {
                     // A 依赖 B，获取 B 的实例化

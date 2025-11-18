@@ -4,6 +4,10 @@ import cn.mini.beans.PropertyValues;
 
 public class BeanDefinition {
 
+    String SCOPE_SINGLETON = ConfigurableBeanFactory.SCOPE_SINGLETON;
+
+    String SCOPE_PROTOTYPE = ConfigurableBeanFactory.SCOPE_PROTOTYPE;
+
     private Class<?> beanClass;
 
     private PropertyValues propertyValues;
@@ -11,6 +15,19 @@ public class BeanDefinition {
     private String initMethodName;
 
     private String destroyMethodName;
+
+    private String scope = SCOPE_SINGLETON;
+
+    private boolean singleton = true;
+
+    private boolean prototype = false;
+
+    //在xml注册Bean定义时，通过scope字段来判断是单例还是原型
+    public void setScope(String scope) {
+        this.scope = scope;
+        this.singleton = SCOPE_SINGLETON.equals(scope);
+        this.prototype = SCOPE_PROTOTYPE.equals(scope);
+    }
 
     public BeanDefinition(Class<?> beanClass) {
         this.beanClass = beanClass;
@@ -22,6 +39,9 @@ public class BeanDefinition {
         this.beanClass = beanClass;
     }
 
+    public boolean isSingleton() {
+        return singleton;
+    }
 
     public Class<?> getBeanClass() {
         return beanClass;

@@ -62,26 +62,28 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
     protected <T> T doGetBean(String name, Object[] args) throws BeansException {
         Object bean = getSingleton(name);
         if (bean != null) {
-            return (T) bean;
+            return (T) getObjectForBeanInstance(bean, name);
         }
 
         BeanDefinition beanDefinition = getBeanDefinition(name);
-        Object bean1 = createBean(name, beanDefinition, args);
-
-        return (T)getObjectForBeanInstance(bean1, name) ;
+        Object ins = createBean(name, beanDefinition, args);
+        return (T) getObjectForBeanInstance(ins, name);
     }
 
-    private Object getObjectForBeanInstance(Object beanInstance, String beanName) {
+        private Object getObjectForBeanInstance(Object beanInstance, String beanName) {
         if (!(beanInstance instanceof FactoryBean)) {
             return beanInstance;
         }
-        Object obj = getCachedObjectForFactoryBean(beanName);
-        if (obj == null) {
+
+        Object object = getCachedObjectForFactoryBean(beanName);
+
+        if (object == null) {
             FactoryBean<?> factoryBean = (FactoryBean<?>) beanInstance;
-            obj = getObjectFromFactoryBean(factoryBean, beanName);
+            object = getObjectFromFactoryBean(factoryBean, beanName);
         }
-        return obj;
+        return object;
     }
+
 
     protected abstract BeanDefinition getBeanDefinition(String beanName) throws BeansException;
 

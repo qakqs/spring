@@ -2,6 +2,7 @@ package cn.mini.beans.factory.support;
 
 import cn.mini.beans.BeansException;
 import cn.mini.beans.factory.BeanFactory;
+import cn.mini.beans.factory.FactoryBean;
 import cn.mini.beans.factory.config.BeanDefinition;
 import cn.mini.beans.factory.config.BeanPostProcessor;
 import cn.mini.beans.factory.config.ConfigurableBeanFactory;
@@ -10,7 +11,7 @@ import cn.mini.util.ClassUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
+public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport implements ConfigurableBeanFactory {
 
     /**
      * BeanPostProcessors to apply in createBean
@@ -61,12 +62,28 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
     protected <T> T doGetBean(String name, Object[] args) throws BeansException {
         Object bean = getSingleton(name);
         if (bean != null) {
-            return (T) bean;
+            return (T) getObjectForBeanInstance(bean, name);
         }
 
         BeanDefinition beanDefinition = getBeanDefinition(name);
-        return (T) createBean(name, beanDefinition, args);
+        Object ins = createBean(name, beanDefinition, args);
+        return (T) getObjectForBeanInstance(ins, name);
     }
+
+        private Object getObjectForBeanInstance(Object beanInstance, String beanName) {
+        if (!(beanInstance instanceof FactoryBean)) {
+            return beanInstance;
+        }
+
+        Object object = getCachedObjectForFactoryBean(beanName);
+
+        if (object == null) {
+            FactoryBean<?> factoryBean = (FactoryBean<?>) beanInstance;
+            object = getObjectFromFactoryBean(factoryBean, beanName);
+        }
+        return object;
+    }
+
 
     protected abstract BeanDefinition getBeanDefinition(String beanName) throws BeansException;
 
