@@ -17,6 +17,8 @@
         <module>core-7</module>
         <module>core-8</module>
         <module>core-9</module>
+        <module>core-10</module>
+        <module>core-11</module>
 
     </modules>
 
@@ -41,7 +43,7 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.8.11</version>
+            <version>5.8.40</version>
         </dependency>
     </dependencies>
 
