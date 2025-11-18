@@ -1,6 +1,5 @@
 package cn.mini.beans.factory.support.Instantion;
 
-import cn.mini.beans.BeansException;
 import cn.mini.beans.factory.config.BeanDefinition;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.NoOp;

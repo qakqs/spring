@@ -5,13 +5,15 @@ import cn.mini.beans.factory.*;
 import cn.mini.context.ApplicationContext;
 import cn.mini.context.ApplicationContextAware;
 
-public class UserService {
+public class UserService implements BeanNameAware, BeanClassLoaderAware, ApplicationContextAware,BeanFactoryAware  {
 
 
     private String uId;
     private String company;
     private String location;
     private UserDao userDao;
+    private ApplicationContext applicationContext;
+    private BeanFactory beanFactory;
 
 
     public String queryUserInfo() {
@@ -49,5 +51,35 @@ public class UserService {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    @Override
+    public void setBeanClassLoader(ClassLoader classLoader) {
+                System.out.println("ClassLoader：" + classLoader);
+
+    }
+
+    @Override
+    public void setBeanName(String name) {
+        System.out.println("Bean Name is：" + name);
+
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
+
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        this.beanFactory = beanFactory;
+    }
+
+    public BeanFactory getBeanFactory() {
+        return beanFactory;
+    }
+
+    public ApplicationContext getApplicationContext() {
+        return applicationContext;
     }
 }

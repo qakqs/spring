@@ -9,13 +9,10 @@ import java.util.Map;
 import java.util.Set;
 
 public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
-    protected static final Object NULL_OBJECT = new Object();
 
     private Map<String, Object> singletonObjects = new HashMap<>();
     Map<String, DisposableBean> disposableBeans = new HashMap<>();
-
-
-
+    protected static final Object NULL_OBJECT  = new Object();
     @Override
     public Object getSingleton(String beanName) {
         return singletonObjects.get(beanName);
