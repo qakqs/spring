@@ -4,6 +4,7 @@ import cn.mini.beans.BeansException;
 import cn.mini.beans.factory.ConfigurableListableBeanFactory;
 import cn.mini.beans.factory.config.BeanFactoryPostProcessor;
 import cn.mini.beans.factory.config.BeanPostProcessor;
+import cn.mini.beans.factory.support.ApplicationContextAwareProcessor;
 import cn.mini.context.ConfigurableApplicationContext;
 import cn.mini.core.io.DefaultResourceLoader;
 
@@ -17,6 +18,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         refreshBeanFactory();
         // 获取bean工厂
         ConfigurableListableBeanFactory beanFactory = getBeanFactory();
+
+        //  添加beanProcessor
+        beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
 
         // 3. 在 Bean 实例化之前，执行 BeanFactoryPostProcessor (Invoke factory processors registered as beans in the context.)
         invokeBeanFactoryPostProcessors(beanFactory);

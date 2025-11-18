@@ -1,15 +1,20 @@
 package bean;
 
-import cn.mini.beans.factory.DisposableBean;
-import cn.mini.beans.factory.InitializingBean;
+import cn.mini.beans.BeansException;
+import cn.mini.beans.factory.*;
+import cn.mini.context.ApplicationContext;
+import cn.mini.context.ApplicationContextAware;
 
-public class UserService implements InitializingBean, DisposableBean {
+public class UserService implements BeanNameAware, BeanClassLoaderAware, ApplicationContextAware,BeanFactoryAware  {
 
 
     private String uId;
     private String company;
     private String location;
     private UserDao userDao;
+    private ApplicationContext applicationContext;
+    private BeanFactory beanFactory;
+
 
     public String queryUserInfo() {
         System.out.println("查询用户信息：" + userDao.queryUserName(uId));
@@ -49,14 +54,32 @@ public class UserService implements InitializingBean, DisposableBean {
     }
 
     @Override
-    public void destroy() throws Exception {
-        System.out.println("执行：UserService.destroy");
+    public void setBeanClassLoader(ClassLoader classLoader) {
+                System.out.println("ClassLoader：" + classLoader);
 
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
-        System.out.println("执行：UserService.afterPropertiesSet");
+    public void setBeanName(String name) {
+        System.out.println("Bean Name is：" + name);
 
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
+
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        this.beanFactory = beanFactory;
+    }
+
+    public BeanFactory getBeanFactory() {
+        return beanFactory;
+    }
+
+    public ApplicationContext getApplicationContext() {
+        return applicationContext;
     }
 }

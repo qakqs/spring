@@ -4,8 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.mini.beans.BeansException;
 import cn.mini.beans.PropertyValues;
-import cn.mini.beans.factory.DisposableBean;
-import cn.mini.beans.factory.InitializingBean;
+import cn.mini.beans.factory.*;
 import cn.mini.beans.factory.config.AutowireCapableBeanFactory;
 import cn.mini.beans.factory.config.BeanDefinition;
 import cn.mini.beans.factory.config.BeanPostProcessor;
@@ -38,6 +37,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     }
 
     private Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) throws BeansException {
+        initializeAware(beanName, bean, beanDefinition);
         // 1. 执行 BeanPostProcessor Before 处理
         Object wrappedBean = applyBeanPostProcessorsBeforeInitialization(bean, beanName);
         try {
@@ -48,6 +48,22 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         // 2. 执行 BeanPostProcessor After 处理
         wrappedBean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
         return wrappedBean;
+    }
+
+    private void initializeAware(String beanName, Object bean, BeanDefinition beanDefinition){
+                // invokeAwareMethods
+        if (bean instanceof Aware) {
+            if (bean instanceof BeanFactoryAware) {
+                ((BeanFactoryAware) bean).setBeanFactory(this);
+            }
+            if (bean instanceof BeanClassLoaderAware){
+                ((BeanClassLoaderAware) bean).setBeanClassLoader(getBeanClassLoader());
+            }
+            if (bean instanceof BeanNameAware) {
+                ((BeanNameAware) bean).setBeanName(beanName);
+            }
+        }
+
     }
 
     protected void registerDisposableBeanIfNecessary(String beanName, Object bean, BeanDefinition beanDefinition) {

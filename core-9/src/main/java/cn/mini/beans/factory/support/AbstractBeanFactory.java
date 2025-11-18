@@ -5,6 +5,7 @@ import cn.mini.beans.factory.BeanFactory;
 import cn.mini.beans.factory.config.BeanDefinition;
 import cn.mini.beans.factory.config.BeanPostProcessor;
 import cn.mini.beans.factory.config.ConfigurableBeanFactory;
+import cn.mini.util.ClassUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,16 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
      * BeanPostProcessors to apply in createBean
      */
     private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
+
+
+    /**
+     * ClassLoader to resolve bean class names with, if necessary
+     */
+    private ClassLoader beanClassLoader = ClassUtils.getDefaultClassLoader();
+
+    public ClassLoader getBeanClassLoader() {
+        return beanClassLoader;
+    }
 
     @Override
     public Object getBean(String name, Object... args) throws BeansException {
