@@ -6,10 +6,11 @@
         <property name="location" value="深圳"/>
         <property name="userDao" ref="proxyUserDao"/>
     </bean>
-        <bean id="proxyUserDao" class="bean.ProxyBeanFactory"/>
+    <bean id="proxyUserDao" class="bean.ProxyBeanFactory"/>
     <bean class="event.ContextRefreshedEventListener"/>
 
     <bean class="event.CustomEventListener"/>
+    <bean class="event.CustomEventTwoListener"/>
 
     <bean class="event.ContextClosedEventListener"/>
 
