@@ -25,8 +25,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
 
     @Override
     public void refresh() throws BeansException {
+
         //0. 创建bean工厂
         refreshBeanFactory();
+
         //1. 获取bean工厂
         ConfigurableListableBeanFactory beanFactory = getBeanFactory();
 
@@ -80,7 +82,6 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         applicationEventMulticaster.multicastEvent(event);
     }
 
-
     private void registerBeanPostProcessors(ConfigurableListableBeanFactory beanFactory) throws BeansException {
 
         Map<String, BeanPostProcessor> beanPostProcessorMap = getBeansOfType(BeanPostProcessor.class);
@@ -88,8 +89,6 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
             beanFactory.addBeanPostProcessor(beanPostProcessor);
         }
     }
-
-    ;
 
     private void invokeBeanFactoryPostProcessors(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         Map<String, BeanFactoryPostProcessor> beanFactoryPostProcessorMap = getBeansOfType(BeanFactoryPostProcessor.class);
