@@ -1,11 +1,9 @@
 package bean;
 
-import cn.mini.beans.BeansException;
 import cn.mini.beans.factory.*;
 import cn.mini.context.ApplicationContext;
-import cn.mini.context.ApplicationContextAware;
 
-public class UserService implements BeanNameAware, BeanClassLoaderAware, ApplicationContextAware,BeanFactoryAware  {
+public class UserService  implements IUserService {
 
 
     private String uId;
@@ -16,12 +14,8 @@ public class UserService implements BeanNameAware, BeanClassLoaderAware, Applica
     private BeanFactory beanFactory;
 
 
-    public String queryUserInfo() {
-        System.out.println("查询用户信息：" + userDao.queryUserName(uId));
-        return userDao.queryUserName(uId) + "," + company + "," + location;
-    }
-
-    public String getuId() {
+    @Override
+    public String getUid() {
         return uId;
     }
 
@@ -53,33 +47,5 @@ public class UserService implements BeanNameAware, BeanClassLoaderAware, Applica
         this.location = location;
     }
 
-    @Override
-    public void setBeanClassLoader(ClassLoader classLoader) {
-                System.out.println("ClassLoader：" + classLoader);
 
-    }
-
-    @Override
-    public void setBeanName(String name) {
-        System.out.println("Bean Name is：" + name);
-
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
-
-    @Override
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-        this.beanFactory = beanFactory;
-    }
-
-    public BeanFactory getBeanFactory() {
-        return beanFactory;
-    }
-
-    public ApplicationContext getApplicationContext() {
-        return applicationContext;
-    }
 }
