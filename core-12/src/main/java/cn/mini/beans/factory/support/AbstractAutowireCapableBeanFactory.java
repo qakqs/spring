@@ -2,6 +2,7 @@ package cn.mini.beans.factory.support;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.mini.aop.InstantiationAwareBeanPostProcessor;
 import cn.mini.beans.BeansException;
 import cn.mini.beans.PropertyValue;
 import cn.mini.beans.PropertyValues;
@@ -15,6 +16,7 @@ import cn.mini.beans.factory.support.Instantion.InstantiationStrategy;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.util.List;
 
 public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory implements AutowireCapableBeanFactory {
 
@@ -24,6 +26,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     protected Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args) throws BeansException {
         Object bean = null;
         try {
+            bean = resolveBeforeInstantiation(beanName, beanDefinition);
+            if (bean != null) {
+                return bean;
+            }
             bean = createBeanInstance(beanName, beanDefinition, args);
             applyPropertyValues(bean, beanName, beanDefinition);
             bean = initializeBean(beanName, bean, beanDefinition);
@@ -33,10 +39,32 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
         // 注册实现了 DisposableBean 接口的 Bean 对象
         registerDisposableBeanIfNecessary(beanName, bean, beanDefinition);
-        if (beanDefinition.isSingleton()){
+        if (beanDefinition.isSingleton()) {
             addSingleton(beanName, bean);
         }
         return bean;
+    }
+
+
+    protected Object resolveBeforeInstantiation(String beanName, BeanDefinition beanDefinition) {
+        Object bean = applyBeanPostProcessorBeforeInstantiation(beanDefinition.getBeanClass(), beanName);
+        if (null != bean) {
+            bean = applyBeanPostProcessorsBeforeInitialization(bean, beanName);
+        }
+        return bean;
+    }
+
+    protected Object applyBeanPostProcessorBeforeInstantiation(Class<?> beanClass, String beanName) {
+        List<BeanPostProcessor> beanPostProcessors = getBeanPostProcessors();
+        for (BeanPostProcessor beanPostProcessor : beanPostProcessors) {
+            if (beanPostProcessor instanceof InstantiationAwareBeanPostProcessor) {
+                Object result = ((InstantiationAwareBeanPostProcessor) beanPostProcessor).postProcessBeforeInstantiation(beanClass, beanName);
+                if (null != result) {
+                    return result;
+                }
+            }
+        }
+        return null;
     }
 
     private Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) throws BeansException {
@@ -53,13 +81,13 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         return wrappedBean;
     }
 
-    private void initializeAware(String beanName, Object bean, BeanDefinition beanDefinition){
-                // invokeAwareMethods
+    private void initializeAware(String beanName, Object bean, BeanDefinition beanDefinition) {
+        // invokeAwareMethods
         if (bean instanceof Aware) {
             if (bean instanceof BeanFactoryAware) {
                 ((BeanFactoryAware) bean).setBeanFactory(this);
             }
-            if (bean instanceof BeanClassLoaderAware){
+            if (bean instanceof BeanClassLoaderAware) {
                 ((BeanClassLoaderAware) bean).setBeanClassLoader(getBeanClassLoader());
             }
             if (bean instanceof BeanNameAware) {

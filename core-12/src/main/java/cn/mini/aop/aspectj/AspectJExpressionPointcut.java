@@ -43,4 +43,9 @@ public class AspectJExpressionPointcut implements Pointcut, ClassFilter, MethodM
     public MethodMatcher getMethodMatcher() {
         return this;
     }
+
+    @Override
+    public boolean matches(Class<?> clazz) {
+        return pointcutExpression.couldMatchJoinPointsInType(clazz);
+    }
 }

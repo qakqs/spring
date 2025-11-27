@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
+        <bean class="cn.mini.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
+    <bean id="beforeAdvice" class="bean.UserServiceBeforeAdvice"/>
+
     <bean id="userService" class="bean.UserService" scope="prototype">
-        <property name="uId" value="10001"/>
-        <property name="company" value="腾讯"/>
-        <property name="location" value="深圳"/>
-        <property name="authService" ref="authService"/>
+    </bean>
+    <bean id="methodInterceptor"
+          class="cn.mini.aop.framework.adapter.MethodBeforeAdviceInterceptor">
+        <property name="advice" ref="beforeAdvice"/>
+    </bean>
+
+    <bean id="pointcutAdvisor" class="cn.mini.aop.aspectj.AspectJExpressionPointcutAdvisor">
+        <property name="expression" value="execution(* bean.IUserService.*(..))"/>
+        <property name="advice" ref="methodInterceptor"/>
     </bean>
 
 

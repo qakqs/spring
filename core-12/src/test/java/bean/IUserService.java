@@ -2,5 +2,7 @@ package bean;
 
 public interface IUserService {
 
-    String getUid();
+    public String queryUserInfo();
+
+    public String register(String userName);
 }

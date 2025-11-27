@@ -1,5 +1,7 @@
 package cn.mini.aop;
 
+import org.aopalliance.intercept.MethodInterceptor;
+
 public class TargetSource {
         private final Object target;
 
